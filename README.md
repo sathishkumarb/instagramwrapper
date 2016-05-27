@@ -10,13 +10,15 @@ $instagramWr = new InstagramWrapper(array(
 ));
 
 
-
 // create redirect URL
 $redirectTransfer = $instagramWr->userRedirect();
 
-//Step 2
+//Step 2: curl oauth instagram api auhtentication using hard coded response code in localhost not in public domain to test connect with chain response and authentication with get server code
 
-//$authcode = "9855f77856d044c5aff558549755ef46";
-//$userdata = $instagramWr->userAuthToken($authcode);
-//var_dump($userdata);
+$authcode = "9855f77856d044c5aff558549755ef46"; // or $_GET['code'] 
+
+
+// response code is unique 
+$userdata = $instagramWr->userAuthToken($authcode);
+var_dump($userdata);
 
