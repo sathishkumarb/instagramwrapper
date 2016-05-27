@@ -55,9 +55,11 @@ class InstagramWrapper {
 
   /*
   // @function: to get auth token step 2 get the auth token based on step 1 code responses
-  // @response: 
-  // @params:
-  // @return:
+  // @response: fail: wrong code or expired code :[code] => 400 [error_type] => OAuthException [error_message] => Matching code was not found or was already used. 
+  // @response: fail : Error in Curl call with post params:
+  // @response: fail : Authorization code is empty
+  // @params: authorizaion response code fromo step 1
+  // @return: json user data or null
   */
   public function userAuthToken($code = null){
     $this->authorizationCode = $code;
@@ -72,7 +74,6 @@ class InstagramWrapper {
  
       $ch = curl_init();
       curl_setopt($ch, CURLOPT_URL, self::authtokenURL);
-      
       curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($postData));
       curl_setopt($ch, CURLOPT_HTTPHEADER, array('Accept: application/json'));
       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -81,13 +82,26 @@ class InstagramWrapper {
       $jsonData = curl_exec($ch);
       
       if (empty($jsonData)) {
-        throw new Exception("Error in Curl call with post params" . curl_error($ch));
+        throw new Exception("Error in Curl call with post params:" . curl_error($ch));
       }
       curl_close($ch);
       
       return json_decode($jsonData);
+    } else {
+      throw new Exception("Authorization code is empty");
     }
-    return;
+    return ;
   }
 
 }
+
+// initialize redirect call on html view more details on read me
+$instagramWr = new InstagramWrapper(array(
+    'cid'      => 'b0940040034c49319c0e543fb94034da',
+    'secret'   => 'a96bc4b032544df88506f81b52597b1c',
+    'redirect' => 'http://dev.tapetickets.com/public/'
+));
+
+$redirectTransfer = $instagramWr->userRedirect();
+echo "<a href='$redirectTransfer'>Login with Instagram</a><br/>";
+echo "Cient Rdirect URL:".$redirectTransfer;
