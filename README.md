@@ -14,3 +14,9 @@ $instagramWr = new InstagramWrapper(array(
 // create redirect URL
 $redirectTransfer = $instagramWr->userRedirect();
 
+//Step 2
+
+//$authcode = "9855f77856d044c5aff558549755ef46";
+//$userdata = $instagramWr->userAuthToken($authcode);
+//var_dump($userdata);
+
