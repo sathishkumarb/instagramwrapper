@@ -8,9 +8,8 @@ class InstagramWrapper {
 
   // constants to connect and autohrize api and error abbreviations
   const authorizationURL = 'https://api.instagram.com/oauth/authorize/';
-  const authTokenURL = 'https://api.instagram.com/oauth/access_token';
+  const authtokenURL = 'https://api.instagram.com/oauth/access_token';
   const csrfstate = 'csrfstate';
-  const errorType = 'OAuthAccessTokenError';
 
   // scope limited variables to hold scope, clientid, secret code, authoirzatin code and redirect url
   private $clientId;
@@ -41,7 +40,8 @@ class InstagramWrapper {
   // @return: code ex: http://dev.tapetickets.com/public/?code=bdfceb18a16946d48e5eea423b5d7e2e&state=csrfstate
   */
   public function userRedirect($scope = null){
-    // mandate check for client id and redirect url tp pass pn redircet authorize
+    // mandate check for client id and redirect url to redirect and authorize
+    // scope is validated to accept + as chars for multiple scopes as delimiter
     if (isset($this->clientId) && !empty($this->clientId) && isset($this->redirectURL) && !empty($this->redirectURL)){
         return "https://api.instagram.com/oauth/authorize/?client_id=".$this->clientId."&redirect_uri=".$this->redirectURL.
         "&scope=".((isset($scope)&& !empty($scope)) ? $scope : implode("+",$this->scopes))."&state=".self::csrfstate.
