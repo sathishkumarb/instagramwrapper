@@ -10,16 +10,14 @@ class InstagramWrapper {
   const authorizationURL = 'https://api.instagram.com/oauth/authorize/';
   const authTokenURL = 'https://api.instagram.com/oauth/access_token';
   const csrfstate = 'csrfstate';
-  const error = 'access_denied';
-  const errorReason = 'user_denied';
-  const errorDescription = 'The user denied your request';
   const errorType = 'OAuthAccessTokenError';
 
   // scope limited variables to hold scope, clientid, secret code, authoirzatin code and redirect url
   private $clientId;
   private $clientSecret;
-  private $redirectURL = 'http://dev.tapetickets.com';
+  private $redirectURL = 'http://dev.tapetickets.com/public/';
   private $authorizationCode;
+  // can be array('basic','likes') refer instagram doc for mroe
   private $scopes = array('basic');
 
   /*
@@ -33,12 +31,13 @@ class InstagramWrapper {
   }
   
   /* 
-  // @function: handles the failand pass test cases and below are list of failover test cases on omission of any url params
+  // @function: step 1 call to redirect and auhtorize the url, handles the fail and pass test cases and below are list of failover test cases on omission of any url params
   // @response: {"code": 400, "error_type": "OAuthException", "error_message": "Redirect URI does not match registered redirect URI"
   // @response: {"code": 400, "error_type": "OAuthException", "error_message": "Invalid scope field(s): basicstate=csrfstate"}
+  // @response: {"code": 400, "error_type": "OAuthException", "error_message": "Invalid Client ID"}
   // @response: {"code": 400, "error_type": "OAuthException", "error_message": "You must include a valid client_id, response_type, and redirect_uri parameters"}
   // @response:  Invalid Client Id and Secret Token Supplied
-  // @params: $scope and state is optional by default scope has basic and can be extended to 'basic,likes' and state is csrf validation
+  // @params: clientid and redirect url is mandate,$scope and state is optional by default scope has basic and can be extended to 'basic,likes' and state is csrf validation
   // @return: code ex: http://dev.tapetickets.com/public/?code=bdfceb18a16946d48e5eea423b5d7e2e&state=csrfstate
   */
   public function userRedirect($scope = null){
@@ -48,14 +47,24 @@ class InstagramWrapper {
         "&scope=".((isset($scope)&& !empty($scope)) ? $scope : implode("+",$this->scopes))."&state=".self::csrfstate.
         "&response_type=code";
     } else {
-      // Handles invlid or null client id and secret mandatory to connect to initiate and connect API
+      // Handles invalid or null client id and secret mandatory to connect to initiate and connect API
       throw new Exception("Invalid Client Id and Secret Token Supplied");
     }
     return;
   }
 
+  /*
+  // @fucntion: to get auth token step 2 get the auth token based on step 1 code responses
+  // @response: 
+  // @params:
+  // @return:
+  */
+  public function userAuthToken(){
+    return;
+  }
+
 }
-// initialize more on read me
+// initialize redirect call on html view more details on read me
 $instagramWr = new InstagramWrapper(array(
     'cid'      => 'b0940040034c49319c0e543fb94034da',
     'secret'   => 'a96bc4b032544df88506f81b52597b1c',
